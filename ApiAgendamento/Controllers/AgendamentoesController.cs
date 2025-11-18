@@ -68,6 +68,10 @@ namespace ApiAgendamento.Controllers
             {
                 await _context.SaveChangesAsync();
 
+
+                string msgLog = $"EDITADO: ID {id} | Novo Título: {agendamento.Titulo} | Nova Data: {agendamento.DatahorarioInicio}";
+                GerarLog(msgLog);
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -100,6 +104,9 @@ namespace ApiAgendamento.Controllers
             _context.Agendamentos.Add(agendamento);
             await _context.SaveChangesAsync();
 
+            string msgLog = $"CRIADO: Novo Agendamento ID {agendamento.Id} | Título: {agendamento.Titulo} | Início: {agendamento.DatahorarioInicio}";
+            GerarLog(msgLog);
+
             return CreatedAtAction("GetAgendamento", new {id = agendamento.Id}, agendamento);
 
         }
@@ -125,7 +132,29 @@ namespace ApiAgendamento.Controllers
             return _context.Agendamentos.Any(e => e.Id == id);
         }
 
+        private void GerarLog(string mensagem)
+        {
+            try
+            {
+                string pastaBase = AppDomain.CurrentDomain.BaseDirectory;
+                string pastaLogs = Path.Combine(pastaBase, "Logs");
 
+                if (!Directory.Exists(pastaLogs))
+                {
+                    Directory.CreateDirectory(pastaLogs);
+                }
+
+                string arquivoLog = Path.Combine(pastaLogs, "log_agendamentos.txt");
+
+
+                string logFormatado = $"[{DateTime.Now:dd/MM/yyyy HH:mm:ss}] - {mensagem}{Environment.NewLine}";
+
+                System.IO.File.AppendAllText(arquivoLog, logFormatado);
+            }
+            catch
+            {
+            }
+        }
 
     }
 }

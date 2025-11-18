@@ -96,6 +96,7 @@
             buttonEditar.TabIndex = 45;
             buttonEditar.Text = "Editar";
             buttonEditar.UseVisualStyleBackColor = true;
+            buttonEditar.Visible = false;
             // 
             // textBoxObservacao
             // 
