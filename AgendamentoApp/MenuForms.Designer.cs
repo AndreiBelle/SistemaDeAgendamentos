@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuForms));
             tabControlAgendamentos = new TabControl();
             tabPageConsultar = new TabPage();
             buttonEditar = new Button();
@@ -241,6 +242,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(994, 715);
             Controls.Add(tabControlAgendamentos);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MenuForms";
             Text = "Agendamentos da Sala de Reunião";
             Load += MenuForms_Load;

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ApiAgendamento.Data;
 using ApiAgendamento.Models;
+using System.IO;
 
 namespace ApiAgendamento.Controllers
 {
@@ -16,14 +17,12 @@ namespace ApiAgendamento.Controllers
             _context = context;
         }
 
-        // GET: api/Agendamentoes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentos()
         {
             return await _context.Agendamentos.ToListAsync();
         }
 
-        // GET: api/Agendamentoes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Agendamento>> GetAgendamento(int id)
         {
@@ -42,37 +41,33 @@ namespace ApiAgendamento.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAgendamento(int id, Agendamento agendamento)
         {
-            // 1. Validação padrão: o ID do URL deve ser o mesmo do objeto
+
             if (id != agendamento.Id)
             {
                 return BadRequest("IDs não conferem.");
             }
 
-            // --- ⬇️ VALIDAÇÃO DE CONFLITO PARA 'PUT' ⬇️ ---
-            // É a mesma lógica do POST, mas com uma exceção:
-            // "Procure um conflito com qualquer agendamento QUE NÃO SEJA EU MESMO"
 
             var conflito = await _context.Agendamentos
                 .FirstOrDefaultAsync(a =>
-                    agendamento.DatahorarioInicio < a.DataHoraFim && // Novo Início < Fim Existente
-                    agendamento.DataHoraFim > a.DatahorarioInicio &&   // Novo Fim > Início Existente
-                    a.Id != agendamento.Id // <-- A EXCEÇÃO: Ignorar eu mesmo
+                    agendamento.DatahorarioInicio < a.DataHoraFim && 
+                    agendamento.DataHoraFim > a.DatahorarioInicio &&   
+                    a.Id != agendamento.Id //
                 );
 
             if (conflito != null)
             {
-                // Encontrou um conflito com outro agendamento
+
                 return BadRequest($"Horário em conflito com a reserva '{conflito.Titulo}' (das {conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim:HH:mm}).");
             }
 
-            // --- ⬆️ FIM DA VALIDAÇÃO ⬆️ ---
-
-            // 2. Se não achou conflito, podemos atualizar no banco
+ 
             _context.Entry(agendamento).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,7 +81,6 @@ namespace ApiAgendamento.Controllers
                 }
             }
 
-            // 3. Retorna "Sem Conteúdo", o padrão de sucesso para PUT
             return NoContent();
         }
 
@@ -130,5 +124,8 @@ namespace ApiAgendamento.Controllers
         {
             return _context.Agendamentos.Any(e => e.Id == id);
         }
+
+
+
     }
 }

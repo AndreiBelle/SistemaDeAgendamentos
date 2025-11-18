@@ -46,7 +46,7 @@ namespace AgendamentoApp
         {
             InitializeComponent();
             httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7219");
+            httpClient.BaseAddress = new Uri("http://192.168.3.254:5000");
         }
 
         private async void buttonSalvar_Click(object sender, EventArgs e)
@@ -146,61 +146,84 @@ namespace AgendamentoApp
 
         private async void buttonExcluir_Click(object sender, EventArgs e)
         {
-            if (idSelecionado == 0)
+            string senhaCorreta = "Admin#TFL123";
+            using (InputPasswordForm formsenha = new InputPasswordForm())
             {
-                MessageBox.Show("Por favor, selecione um agendamento na tabela para deletar");
-                return;
-            }
 
-            DialogResult confirmacao = MessageBox.Show("Tem certeza que deseja deletar esse agendamento?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirmacao == DialogResult.Yes)
-            {
-                try
+                if (formsenha.ShowDialog() == DialogResult.OK)
                 {
-                    HttpResponseMessage resposta = await httpClient.DeleteAsync($"/api/agendamentoes/{idSelecionado}");
 
-                    if (resposta.IsSuccessStatusCode)
+                    string senhaDigitada = formsenha.SenhaDigitada;
+
+                    if (senhaDigitada == senhaCorreta)
                     {
-                        MessageBox.Show("Agendamento apagado com Sucesso");
-                        await CarregarAgendamentosAsync();
+                        MessageBox.Show("Senha correta! Ação Liberada.");
+
+                        if (idSelecionado == 0)
+                        {
+                            MessageBox.Show("Por favor, selecione um agendamento na tabela para deletar");
+                            return;
+                        }
+
+                        DialogResult confirmacao = MessageBox.Show("Tem certeza que deseja deletar esse agendamento?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (confirmacao == DialogResult.Yes)
+                        {
+                            try
+                            {
+                                HttpResponseMessage resposta = await httpClient.DeleteAsync($"/api/agendamentoes/{idSelecionado}");
+
+                                if (resposta.IsSuccessStatusCode)
+                                {
+                                    MessageBox.Show("Agendamento apagado com Sucesso");
+                                    await CarregarAgendamentosAsync();
+
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Falha ao deletar o agendamento.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Erro de conexão: " + ex.Message);
+                            }
+
+                        }
+
+                        LimparDados();
 
                     }
                     else
                     {
-                        MessageBox.Show("Falha ao deletar o agendamento.");
+                        MessageBox.Show("Senha incorreta!", "Acesso Negado",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Erro de conexão: " + ex.Message);
+                    MessageBox.Show("Operação cancelada.");
                 }
+        }   }
+                    private void dataGridViewAgendamentos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+                    {
+                        if (e.RowIndex >= 0)
+                        {
+                            DataGridViewRow linhaSleceionada = dataGridViewAgendamentos.Rows[e.RowIndex];
 
-            }
+                            Agendamento agendamento = linhaSleceionada.DataBoundItem as Agendamento;
 
-            LimparDados();
+                            if (agendamento != null)
+                            {
+                                textBoxDescricao.Text = agendamento.Titulo;
+                                textBoxObservacao.Text = agendamento.Observacoes;
+                                textBoxResponsavel.Text = agendamento.Responsavel;
+                                dateTimePickerFim.Value = agendamento.DataHoraFim;
+                                dateTimePickerInicio.Value = agendamento.DatahorarioInicio;
 
-        }
-
-        private void dataGridViewAgendamentos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow linhaSleceionada = dataGridViewAgendamentos.Rows[e.RowIndex]; 
-
-                Agendamento agendamento = linhaSleceionada.DataBoundItem as Agendamento;
-
-                if (agendamento != null)
-                {
-                    textBoxDescricao.Text = agendamento.Titulo;
-                    textBoxObservacao.Text = agendamento.Observacoes;
-                    textBoxResponsavel.Text = agendamento.Responsavel;
-                    dateTimePickerFim.Value = agendamento.DataHoraFim;
-                    dateTimePickerInicio.Value = agendamento.DatahorarioInicio;
-
-                    idSelecionado = agendamento.Id;
-                }
-            }
-        }
+                                idSelecionado = agendamento.Id;
+                            }
+                        }
+                    }
     }
 }

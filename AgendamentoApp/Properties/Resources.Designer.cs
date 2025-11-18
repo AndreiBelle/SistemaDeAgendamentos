@@ -69,5 +69,15 @@ namespace AgendamentoApp.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Gemini_Generated_Image_laap8laap8laap8l {
+            get {
+                object obj = ResourceManager.GetObject("Gemini_Generated_Image_laap8laap8laap8l", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
