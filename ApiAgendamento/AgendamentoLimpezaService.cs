@@ -33,7 +33,7 @@ namespace ApiAgendamento
                 var dbContext = scope.ServiceProvider
                                     .GetRequiredService<ApiAgendamento.Data.AppDbContext>();
 
-                var hoje = DateTime.Now;
+                var hoje = DateTime.UtcNow;
 
 
                 await dbContext.Agendamentos

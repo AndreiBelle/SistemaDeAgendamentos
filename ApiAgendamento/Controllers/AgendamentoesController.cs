@@ -50,9 +50,8 @@ namespace ApiAgendamento.Controllers
 
             var conflito = await _context.Agendamentos
                 .FirstOrDefaultAsync(a =>
-                    agendamento.DatahorarioInicio < a.DataHoraFim && 
-                    agendamento.DataHoraFim > a.DatahorarioInicio &&   
-                    a.Id != agendamento.Id //
+                    agendamento.DatahorarioInicio < a.DataHoraFim &&
+                    agendamento.DataHoraFim > a.DatahorarioInicio
                 );
 
             if (conflito != null)
@@ -94,9 +93,12 @@ namespace ApiAgendamento.Controllers
         public async Task<ActionResult<Agendamento>> PostAgendamento(Agendamento agendamento)
         {
             var conflito = await _context.Agendamentos
-                .FirstOrDefaultAsync(a => a.DatahorarioInicio < a.DataHoraFim && a.DataHoraFim > a.DatahorarioInicio);
+                 .FirstOrDefaultAsync(a =>
+                     agendamento.DatahorarioInicio < a.DataHoraFim &&
+                     agendamento.DataHoraFim > a.DatahorarioInicio
+                 );
 
-            if(conflito != null)
+            if (conflito != null)
             {
                 return BadRequest($"Horário em conflito com a reserva {conflito.Titulo} das ({conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim}).");
             }

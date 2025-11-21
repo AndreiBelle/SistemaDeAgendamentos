@@ -25,7 +25,19 @@ namespace AgendamentoApp
             {
                 var ListaAgendamentos = await httpClient.GetFromJsonAsync<List<Agendamento>>("/api/Agendamentoes");
 
+                if(ListaAgendamentos != null)
+                {
+                    ListaAgendamentos = ListaAgendamentos.OrderBy(x => x.DatahorarioInicio).ToList();
+                }
+                
                 dataGridViewAgendamentos.DataSource = ListaAgendamentos;
+
+                dataGridViewAgendamentos.Columns["DatahorarioInicio"].HeaderText = "Início";
+                dataGridViewAgendamentos.Columns["DataHoraFim"].HeaderText = "Fim";
+                dataGridViewAgendamentos.Columns["Responsavel"].HeaderText = "Responsável";
+                dataGridViewAgendamentos.Columns["Titulo"].HeaderText = "Título";
+                dataGridViewAgendamentos.Columns["Observacoes"].HeaderText = "Observações";
+
                 dataGridViewAgendamentos.Columns["Titulo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dataGridViewAgendamentos.Columns["Observacoes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dataGridViewAgendamentos.Columns["Id"].Visible = false;
@@ -46,7 +58,7 @@ namespace AgendamentoApp
         {
             InitializeComponent();
             httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://192.168.3.254:5000");
+            httpClient.BaseAddress = new Uri("http://localhost:5000");
         }
 
         private async void buttonSalvar_Click(object sender, EventArgs e)
