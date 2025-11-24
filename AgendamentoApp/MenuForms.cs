@@ -23,13 +23,13 @@ namespace AgendamentoApp
 
             try
             {
-                var ListaAgendamentos = await httpClient.GetFromJsonAsync<List<Agendamento>>("/api/Agendamentoes");
+         
+                string dataInicio = DateTime.Now.ToString("yyyy-MM-dd");
+                string dataFim = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
 
-                if(ListaAgendamentos != null)
-                {
-                    ListaAgendamentos = ListaAgendamentos.OrderBy(x => x.DatahorarioInicio).ToList();
-                }
-                
+      
+                var ListaAgendamentos = await httpClient.GetFromJsonAsync<List<Agendamento>>($"/api/Agendamentoes/filtro?inicio={dataInicio}&fim={dataFim}");
+
                 dataGridViewAgendamentos.DataSource = ListaAgendamentos;
 
                 dataGridViewAgendamentos.Columns["DatahorarioInicio"].HeaderText = "Início";
@@ -58,7 +58,7 @@ namespace AgendamentoApp
         {
             InitializeComponent();
             httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://localhost:5000");
+            httpClient.BaseAddress = new Uri("http://192.168.3.254:5000");
         }
 
         private async void buttonSalvar_Click(object sender, EventArgs e)

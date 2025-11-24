@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ApiAgendamento.Data;
 using ApiAgendamento.Models;
-using System.IO;
 
 namespace ApiAgendamento.Controllers
 {
@@ -17,10 +16,19 @@ namespace ApiAgendamento.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentos()
+        [HttpGet("filtro")]
+        public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentosPorData(DateTime? inicio, DateTime? fim)
         {
-            return await _context.Agendamentos.ToListAsync();
+            var query = _context.Agendamentos.AsNoTracking().AsQueryable();
+
+            if (inicio.HasValue)
+                query = query.Where(x => x.DatahorarioInicio >= inicio.Value);
+
+            if (fim.HasValue)
+                query = query.Where(x => x.DatahorarioInicio <= fim.Value);
+
+            // Já ordena no banco, evitando processamento no C# (OrderBy)
+            return await query.OrderBy(x => x.DatahorarioInicio).ToListAsync();
         }
 
         [HttpGet("{id}")]

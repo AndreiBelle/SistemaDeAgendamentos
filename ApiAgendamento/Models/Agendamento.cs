@@ -1,5 +1,11 @@
-﻿namespace ApiAgendamento.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ApiAgendamento.Models
 {
+
+    [Index(nameof(DatahorarioInicio))]
+    [Index(nameof(DataHoraFim))]
+
     public class Agendamento
     {
         public int Id { get; set; }
