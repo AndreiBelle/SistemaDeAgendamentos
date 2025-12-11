@@ -50,9 +50,12 @@ namespace ApiAgendamento
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<AppDbContext>();
+                    var context = services.GetRequiredService<ApiAgendamento.Data.AppDbContext>();
+                    // var context = services.GetRequiredService<AppDbContext>();
 
                     context.Database.Migrate();
+
+                    bool warmUp = context.Agendamentos.Any();
                 }
                 catch (Exception ex)
                 {

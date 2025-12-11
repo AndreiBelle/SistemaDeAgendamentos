@@ -21,6 +21,9 @@ namespace AgendamentoApp
         private async Task CarregarAgendamentosAsync()
         {
 
+            Cursor.Current = Cursors.WaitCursor;
+            buttonSalvar.Enabled = false;
+
             try
             {
          
@@ -48,6 +51,11 @@ namespace AgendamentoApp
             {
                 MessageBox.Show("Não foi possível carregar os agendamentos: " + ex.Message);
             }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+                buttonSalvar.Enabled = true;
+            }
         }
 
         private readonly HttpClient httpClient;
@@ -59,7 +67,7 @@ namespace AgendamentoApp
             InitializeComponent();
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("http://192.168.3.254:5000");
-        }
+        }                                   
 
         private async void buttonSalvar_Click(object sender, EventArgs e)
         {
@@ -78,6 +86,8 @@ namespace AgendamentoApp
 
             if (textBoxResponsavel.Text != null && textBoxObservacao.Text != null && textBoxDescricao.Text != null)
             {
+                buttonSalvar.Enabled = false;
+
                 var novoAgendamento = new Agendamento
                 {
                     Titulo = textBoxDescricao.Text.Trim(),
@@ -92,6 +102,7 @@ namespace AgendamentoApp
                 try
                 {
                     HttpResponseMessage resposta;
+
 
                     if(idSelecionado == 0)
                     {
@@ -125,7 +136,8 @@ namespace AgendamentoApp
                 MessageBox.Show("Preencha todos os campos para registrar o atendimento");
             }
 
-            LimparDados();
+            buttonSalvar.Enabled = true;
+          
         }
 
         private void buttonNovo_Click(object sender, EventArgs e)
