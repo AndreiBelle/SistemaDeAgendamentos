@@ -1,6 +1,7 @@
 
 using ApiAgendamento.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace ApiAgendamento
 {
@@ -13,7 +14,11 @@ namespace ApiAgendamento
 
             builder.Services.AddHostedService<AgendamentoLimpezaService>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -24,10 +29,6 @@ namespace ApiAgendamento
             // 3. (NOVO) Registrar o DbContext no sistema
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(connectionString));
-
-            // ---
-            builder.Services.AddControllers();
-            // ...
 
             var app = builder.Build();
 

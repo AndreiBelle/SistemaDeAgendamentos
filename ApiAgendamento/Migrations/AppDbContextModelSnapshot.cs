@@ -41,6 +41,9 @@ namespace ApiAgendamento.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("salaSelecionada")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DataHoraFim");

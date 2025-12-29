@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiAgendamento.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251124121004_AdicionandoIndexData")]
-    partial class AdicionandoIndexData
+    [Migration("20251219133223_Agendamentos")]
+    partial class Agendamentos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace ApiAgendamento.Migrations
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("salaSelecionada")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

@@ -10,7 +10,6 @@ namespace ApiAgendamento.Data
 
         }
         
-        public DbSet<Agendamento> Agendamentos {  get; set; }
-
+        public DbSet<Agendamento> Agendamentos { get; set; }
     }
 }

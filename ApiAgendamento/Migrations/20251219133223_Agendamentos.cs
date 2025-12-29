@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiAgendamento.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class Agendamentos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,12 +21,23 @@ namespace ApiAgendamento.Migrations
                     Observacoes = table.Column<string>(type: "TEXT", nullable: false),
                     Responsavel = table.Column<string>(type: "TEXT", nullable: false),
                     DatahorarioInicio = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DataHoraFim = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    DataHoraFim = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    salaSelecionada = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Agendamentos", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Agendamentos_DataHoraFim",
+                table: "Agendamentos",
+                column: "DataHoraFim");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Agendamentos_DatahorarioInicio",
+                table: "Agendamentos",
+                column: "DatahorarioInicio");
         }
 
         /// <inheritdoc />

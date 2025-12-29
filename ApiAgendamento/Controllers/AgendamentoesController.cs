@@ -20,7 +20,6 @@ namespace ApiAgendamento.Controllers
         public async Task<ActionResult<IEnumerable<Agendamento>>> GetAgendamentosPorData(DateTime? inicio, DateTime? fim)
         {
             var query = _context.Agendamentos.AsNoTracking().AsQueryable();
-
             if (inicio.HasValue)
                 query = query.Where(x => x.DatahorarioInicio >= inicio.Value);
 
@@ -35,7 +34,6 @@ namespace ApiAgendamento.Controllers
         public async Task<ActionResult<Agendamento>> GetAgendamento(int id)
         {
             var agendamento = await _context.Agendamentos.FindAsync(id);
-
             if (agendamento == null)
             {
                 return NotFound();
@@ -50,36 +48,34 @@ namespace ApiAgendamento.Controllers
         public async Task<IActionResult> PutAgendamento(int id, Agendamento agendamento)
         {
 
+
+
             if (id != agendamento.Id)
             {
                 return BadRequest("IDs não conferem.");
             }
 
-
             var conflito = await _context.Agendamentos
-                .FirstOrDefaultAsync(a =>
-                    agendamento.DatahorarioInicio < a.DataHoraFim &&
-                    agendamento.DataHoraFim > a.DatahorarioInicio
-                );
+                .AsNoTracking().FirstOrDefaultAsync(a => a.Id != id &&
+                a.salaSelecionada == agendamento.salaSelecionada &&
+            agendamento.DatahorarioInicio < a.DataHoraFim &&
+            agendamento.DataHoraFim > a.DatahorarioInicio);
 
             if (conflito != null)
             {
-
-                return BadRequest($"Horário em conflito com a reserva '{conflito.Titulo}' (das {conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim:HH:mm}).");
-            }
-
+                BadRequest($"A {conflito.salaSelecionada} já está sendo utilizada pela reserva {conflito.Titulo} das {conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim:HH:mm}");
+            } 
  
             _context.Entry(agendamento).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
-
-
                 string msgLog = $"EDITADO: ID {id} | Novo Título: {agendamento.Titulo} | Nova Data: {agendamento.DatahorarioInicio}";
                 GerarLog(msgLog);
 
             }
+
             catch (DbUpdateConcurrencyException)
             {
                 if (!_context.Agendamentos.Any(e => e.Id == id))
@@ -101,14 +97,14 @@ namespace ApiAgendamento.Controllers
         public async Task<ActionResult<Agendamento>> PostAgendamento(Agendamento agendamento)
         {
             var conflito = await _context.Agendamentos
-                 .FirstOrDefaultAsync(a =>
+                 .FirstOrDefaultAsync(a => a.salaSelecionada == agendamento.salaSelecionada &&
                      agendamento.DatahorarioInicio < a.DataHoraFim &&
                      agendamento.DataHoraFim > a.DatahorarioInicio
                  );
 
             if (conflito != null)
             {
-                return BadRequest($"Horário em conflito com a reserva {conflito.Titulo} das ({conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim}).");
+                return BadRequest($"A {conflito.salaSelecionada} já está sendo utilizada pela reserva {conflito.Titulo} das {conflito.DatahorarioInicio:HH:mm} às {conflito.DataHoraFim:HH:mm}");
             }
 
             _context.Agendamentos.Add(agendamento);
@@ -120,6 +116,8 @@ namespace ApiAgendamento.Controllers
             return CreatedAtAction("GetAgendamento", new {id = agendamento.Id}, agendamento);
 
         }
+
+
 
         // DELETE: api/Agendamentoes/5
         [HttpDelete("{id}")]
@@ -165,6 +163,8 @@ namespace ApiAgendamento.Controllers
             {
             }
         }
+
+
 
     }
 }
