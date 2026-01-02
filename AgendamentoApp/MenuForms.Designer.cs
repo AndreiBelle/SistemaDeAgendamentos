@@ -60,10 +60,10 @@
             // 
             tabControlAgendamentos.Controls.Add(tabPageConsultar);
             tabControlAgendamentos.Controls.Add(tabPageCadastrar);
-            tabControlAgendamentos.Location = new Point(1, -26);
+            tabControlAgendamentos.Location = new Point(-4, -26);
             tabControlAgendamentos.Name = "tabControlAgendamentos";
             tabControlAgendamentos.SelectedIndex = 0;
-            tabControlAgendamentos.Size = new Size(1188, 778);
+            tabControlAgendamentos.Size = new Size(1193, 786);
             tabControlAgendamentos.TabIndex = 2;
             // 
             // tabPageConsultar
@@ -88,7 +88,7 @@
             tabPageConsultar.Location = new Point(4, 29);
             tabPageConsultar.Name = "tabPageConsultar";
             tabPageConsultar.Padding = new Padding(3);
-            tabPageConsultar.Size = new Size(1180, 745);
+            tabPageConsultar.Size = new Size(1185, 753);
             tabPageConsultar.TabIndex = 0;
             tabPageConsultar.Text = "tabPageConsulta";
             tabPageConsultar.UseVisualStyleBackColor = true;
@@ -144,7 +144,7 @@
             dataGridViewAgendamentos.Location = new Point(0, 471);
             dataGridViewAgendamentos.Name = "dataGridViewAgendamentos";
             dataGridViewAgendamentos.RowHeadersWidth = 51;
-            dataGridViewAgendamentos.Size = new Size(1180, 273);
+            dataGridViewAgendamentos.Size = new Size(1185, 282);
             dataGridViewAgendamentos.TabIndex = 42;
             dataGridViewAgendamentos.CellDoubleClick += dataGridViewAgendamentos_CellDoubleClick;
             dataGridViewAgendamentos.CellFormatting += dataGridViewAgendamentos_CellFormatting;
@@ -255,7 +255,7 @@
             tabPageCadastrar.Location = new Point(4, 29);
             tabPageCadastrar.Name = "tabPageCadastrar";
             tabPageCadastrar.Padding = new Padding(3);
-            tabPageCadastrar.Size = new Size(1180, 745);
+            tabPageCadastrar.Size = new Size(1185, 750);
             tabPageCadastrar.TabIndex = 1;
             tabPageCadastrar.Text = "tabPage2";
             tabPageCadastrar.UseVisualStyleBackColor = true;
