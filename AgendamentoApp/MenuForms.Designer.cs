@@ -255,7 +255,7 @@
             tabPageCadastrar.Location = new Point(4, 29);
             tabPageCadastrar.Name = "tabPageCadastrar";
             tabPageCadastrar.Padding = new Padding(3);
-            tabPageCadastrar.Size = new Size(1185, 750);
+            tabPageCadastrar.Size = new Size(1185, 753);
             tabPageCadastrar.TabIndex = 1;
             tabPageCadastrar.Text = "tabPage2";
             tabPageCadastrar.UseVisualStyleBackColor = true;
