@@ -237,7 +237,7 @@ namespace AgendamentoApp
 
         private async void buttonExcluir_Click(object sender, EventArgs e)
         {
-            string senhaCorreta = "Admin#TFL123";
+            string senhaCorreta = "senha";
             using (InputPasswordForm formsenha = new InputPasswordForm())
             {
 
