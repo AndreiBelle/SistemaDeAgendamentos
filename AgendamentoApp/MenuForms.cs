@@ -204,6 +204,8 @@ namespace AgendamentoApp
 
             buttonSalvar.Enabled = true;
             LimparDados();
+
+            buttonSalvar.Text = "Salvar";
         }
 
         private void buttonNovo_Click(object sender, EventArgs e)
@@ -318,6 +320,8 @@ namespace AgendamentoApp
 
                     buttonSalvar.Text = "Atualizar";
                 }
+  
+
             }
         }
 
